@@ -241,7 +241,7 @@
 	if(ishuman(user) && user.a_intent == INTENT_HARM)
 		var/mob/living/carbon/human/H = user
 		for(var/obj/item/gun/G in H.held_items)
-			if(G == src || G.weapon_weight >= WEAPON_MEDIUM || weapon_weight >= WEAPON_MEDIUM)
+			if(G == src)
 				continue
 			else if(G.can_trigger_gun(user))
 				bonus_spread += dual_wield_spread

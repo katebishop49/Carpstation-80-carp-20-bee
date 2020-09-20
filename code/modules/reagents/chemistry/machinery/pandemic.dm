@@ -30,7 +30,7 @@
 	. = ..()
 	if(beaker)
 		var/is_close
-		if(Adjacent(user)) //don't reveal exactly what's inside unless they're close enough to see the UI anyway.
+		if(Adjacent(user)) 
 			. += "It contains \a [beaker]."
 			is_close = TRUE
 		else
@@ -87,14 +87,11 @@
 			this["stealth"] = A.totalStealth()
 			this["stage_speed"] = A.totalStageSpeed()
 			this["transmission"] = A.totalTransmittable()
-			this["symptom_severity"] = A.totalSeverity()
-
 		this["index"] = index++
 		this["agent"] = D.agent
 		this["description"] = D.desc || "none"
 		this["spread"] = D.spread_text || "none"
 		this["cure"] = D.cure_text || "none"
-		this["severity"] = D.severity || "none"
 
 		. += list(this)
 
@@ -110,7 +107,6 @@
 	this["level"] = S.level
 	this["neutered"] = S.neutered
 	this["threshold_desc"] = S.threshold_desc
-	this["severity"] = S.severity
 	. += this
 
 /obj/machinery/computer/pandemic/proc/get_resistance_data(datum/reagent/blood/B)
@@ -240,7 +236,7 @@
 
 /obj/machinery/computer/pandemic/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/reagent_containers) && !(I.item_flags & ABSTRACT) && I.is_open_container())
-		. = TRUE //no afterattack
+		. = TRUE 
 		if(stat & (NOPOWER|BROKEN))
 			return
 		if(beaker)

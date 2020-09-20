@@ -134,7 +134,10 @@
 			disabled += BP
 		missing -= BP.body_zone
 		for(var/obj/item/I in BP.embedded_objects)
-			msg += "<B>[t_He] [t_has] \a [icon2html(I, user)] [I] embedded in [t_his] [BP.name]!</B>\n"
+			if(I.embedding.embedded_warning == 1)
+				msg += "<B><a href='?src=[REF(src)];embedded_object=[REF(I)];embedded_limb=[REF(BP)]' class='warning'>[BP.name] has \a [I] embedded in it!</a><B>\n"
+			if(I.embedding.embedded_warning == 2)
+				msg += "<B><a href='?src=[REF(src)];embedded_object=[REF(I)];embedded_limb=[REF(BP)]' class='warning'>[BP.name] has \a [I] stuck to it!</a><B>\n"
 
 	for(var/X in disabled)
 		var/obj/item/bodypart/BP = X
@@ -224,12 +227,14 @@
 	if(bleedsuppress)
 		msg += "[t_He] [t_is] bandaged with something.\n"
 	else if(bleed_rate)
-		if(reagents.has_reagent(/datum/reagent/toxin/heparin, needs_metabolizing = TRUE))
+		//if(reagents.has_reagent(/datum/reagent/toxin/heparin, needs_metabolizing = TRUE))
+		if(reagents.has_reagent(/datum/reagent/toxin/heparin))
 			msg += "<b>[t_He] [t_is] bleeding uncontrollably!</b>\n"
 		else
 			msg += "<B>[t_He] [t_is] bleeding!</B>\n"
 
-	if(reagents.has_reagent(/datum/reagent/teslium, needs_metabolizing = TRUE))
+	//if(reagents.has_reagent(/datum/reagent/teslium, needs_metabolizing = TRUE))
+	if(reagents.has_reagent(/datum/reagent/teslium))
 		msg += "[t_He] [t_is] emitting a gentle blue glow!\n"
 
 	if(islist(stun_absorption))

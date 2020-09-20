@@ -195,6 +195,8 @@ const GASES = [
     'label': 'Miasma',
     'color': 'olive',
   },
+  // BEGIN
+  // END
   {
     'id': 'hydrogen',
     'name': 'Hydrogen',

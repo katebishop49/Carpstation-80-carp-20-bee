@@ -152,14 +152,18 @@
 		if(((throwingdatum ? throwingdatum.speed : I.throw_speed) >= EMBED_THROWSPEED_THRESHOLD) || I.embedding.embedded_ignore_throwspeed_threshold)
 			if(can_embed(I))
 				if(prob(I.embedding.embed_chance) && !HAS_TRAIT(src, TRAIT_PIERCEIMMUNE))
-					throw_alert("embeddedobject", /obj/screen/alert/embeddedobject)
 					var/obj/item/bodypart/L = pick(bodyparts)
 					L.embedded_objects |= I
-					I.add_mob_blood(src)//it embedded itself in you, of course it's bloody!
+					if(I.embedding.embedded_blood == 1)
+						I.add_mob_blood(src)//it embedded itself in you, of course it's bloody!
 					I.forceMove(src)
 					L.receive_damage(I.w_class*I.embedding.embedded_impact_pain_multiplier)
-					visible_message("<span class='danger'>[I] embeds itself in [src]'s [L.name]!</span>","<span class='userdanger'>[I] embeds itself in your [L.name]!</span>")
-					SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "embedded", /datum/mood_event/embedded)
+					if(I.embedding.embedded_warning == 1)
+						throw_alert("embeddedobject", /obj/screen/alert/embeddedobject)
+						visible_message("<span class='danger'>[I] embeds itself in [src]'s [L.name]!</span>","<span class='userdanger'>[I] embeds itself in your [L.name]!</span>")
+						SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "embedded", /datum/mood_event/embedded)
+					if(I.embedding.embedded_warning == 2)
+						visible_message("<span class='danger'>[I] sticks to [src]'s [L.name]!</span>","<span class='userdanger'>[I] sticks to your [L.name]!</span>")
 					hitpush = FALSE
 					skipcatch = TRUE //can't catch the now embedded item
 
@@ -174,7 +178,22 @@
 /mob/living/carbon/human/attacked_by(obj/item/I, mob/living/user)
 	if(!I || !user)
 		return 0
-
+	if(user.a_intent == INTENT_GRAB)
+		if(I.embedding.embedded_warning == 2 && I.embedding.embedded_taped == 1)
+			if(prob(I.embedding.embed_chance) && !HAS_TRAIT(src, TRAIT_PIERCEIMMUNE))
+				var/obj/item/bodypart/L = pick(bodyparts)
+				L.embedded_objects |= I
+				if(I.embedding.embedded_blood == 1)
+					I.add_mob_blood(src)//it embedded itself in you, of course it's bloody!
+				I.forceMove(src)
+				L.receive_damage(I.w_class*I.embedding.embedded_impact_pain_multiplier)
+				if(I.embedding.embedded_warning == 1)
+					throw_alert("embeddedobject", /obj/screen/alert/embeddedobject)
+					visible_message("<span class='danger'>[I] embeds itself in [src]'s [L.name]!</span>","<span class='userdanger'>[I] embeds itself in your [L.name]!</span>")
+					SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "embedded", /datum/mood_event/embedded)
+				if(I.embedding.embedded_warning == 2)
+					visible_message("<span class='danger'>[I] sticks to [src]'s [L.name]!</span>","<span class='userdanger'>[I] sticks to your [L.name]!</span>")
+				return
 	var/obj/item/bodypart/affecting
 	if(user == src)
 		affecting = get_bodypart(check_zone(user.zone_selected)) //stabbing yourself always hits the right target
@@ -402,6 +421,9 @@
 		if (EXPLODE_HEAVY)
 			brute_loss = 60
 			burn_loss = 60
+			if(bomb_armor)
+				brute_loss = 30*(2 - round(bomb_armor*0.01, 0.05))
+				burn_loss = brute_loss				//damage gets reduced from 120 to up to 60 combined brute+burn
 			damage_clothes(200 - bomb_armor, BRUTE, "bomb")
 			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
 				adjustEarDamage(30, 120)
@@ -410,17 +432,17 @@
 
 		if(EXPLODE_LIGHT)
 			brute_loss = 30
-			burn_loss = 10
+			if(bomb_armor)
+				brute_loss = 15*(2 - round(bomb_armor*0.01, 0.05))
 			damage_clothes(max(50 - bomb_armor, 0), BRUTE, "bomb")
 			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
 				adjustEarDamage(15,60)
 			Knockdown(160 - (bomb_armor * 1.6))		//100 bomb armor will prevent knockdown altogether
 
-	apply_damage(brute_loss, BRUTE, blocked = (bomb_armor * 0.6))
-	apply_damage(burn_loss, BURN, blocked = (bomb_armor * 0.6))
+	take_overall_damage(brute_loss,burn_loss)
 
 	//attempt to dismember bodyparts
-	if(severity >= 2) //don't dismember from light explosions
+	if(severity <= 2 || !bomb_armor)
 		var/max_limb_loss = round(4/severity) //so you don't lose four limbs at severity 3.
 		for(var/X in bodyparts)
 			var/obj/item/bodypart/BP = X

@@ -14,22 +14,22 @@ $include antag_rep.txt
 # There are various options which are hard-locked for security reasons.
 
 ## Server name: This appears at the top of the screen in-game and in the BYOND hub. Uncomment and replace 'beestation' with the name of your choice.
-#@SERVERNAME beestation
+@SERVERNAME Carp Station
 
 ## Server SQL name: This is the name used to identify the server to the SQL DB, distinct from SERVERNAME as it must be at most 32 characters.
 #@SERVERSQLNAME ss13newbs
 
 ## Station name: The name of the station as it is referred to in-game. If commented out, the game will generate a random name instead.
-STATIONNAME Space Station 13
+STATIONNAME Carp Station 13
 
 ## Put on byond hub: Uncomment this to put your server on the byond hub.
-#HUB
+HUB
 
 ## Lobby time: This is the amount of time between rounds that players have to setup their characters and be ready.
-LOBBY_COUNTDOWN 180
+LOBBY_COUNTDOWN 60
 
 ## Round End Time: This is the amount of time after the round ends that players have to murder death kill each other.
-ROUND_END_COUNTDOWN 90
+ROUND_END_COUNTDOWN 60
 
 #USING_DISCORD
 
@@ -131,9 +131,6 @@ LOG_LAW
 ## log viruses
 LOG_VIRUS
 
-## log ID changes
-LOG_ID
-
 ## log crew manifest to seperate file
 LOG_MANIFEST
 
@@ -175,10 +172,10 @@ ALLOW_ADMIN_ASAYCOLOR
 ID_CONSOLE_JOBSLOT_DELAY 30
 
 ## allow players to initiate a restart vote
-#ALLOW_VOTE_RESTART
+ALLOW_VOTE_RESTART
 
 ## allow players to initate a mode-change start
-#ALLOW_VOTE_MODE
+ALLOW_VOTE_MODE
 
 ## min delay (deciseconds) between voting sessions (default 10 minutes)
 VOTE_DELAY 6000
@@ -187,10 +184,10 @@ VOTE_DELAY 6000
 VOTE_PERIOD 600
 
 ## prevents dead players from voting or starting votes
-NO_DEAD_VOTE
+# NO_DEAD_VOTE
 
 ## players' votes default to "No vote" (otherwise,  default to "No change")
-DEFAULT_NO_VOTE
+# DEFAULT_NO_VOTE
 
 ## disable abandon mob
 NORESPAWN
@@ -240,16 +237,16 @@ CHECK_RANDOMIZER
 SERVER  byond://golden.beestation13.com:7777
 
 ## forum address
-FORUMURL http://forums.beestation13.com
+FORUMURL https://discord.gg/BPauwGM
 
 ## Wiki address
 WIKIURL https://wiki.beestation13.com/view
 
 ## Rules address
-RULESURL http://beestation13.com/rules?server=bs_golden
+RULESURL https://discord.gg/BPauwGM
 
 ## Github address
-GITHUBURL https://www.github.com/beestation/beestation-hornet
+GITHUBURL https://github.com/CarpStation/CarpStation
 
 ## Label to tag ingame-registered issues with.
 ## Uncomment this to enable them.
@@ -259,7 +256,7 @@ GITHUBURL https://www.github.com/beestation/beestation-hornet
 DONATEURL https://www.patreon.com/user?u=10639001
 
 ## Discord Invite
-DISCORDURL https://discord.gg/zUe34rs
+DISCORDURL https://discord.gg/BPauwGM
 
 ## Round specific stats address
 ## Link to round specific parsed logs; IE statbus. It is appended with the RoundID automatically by ticker/Reboot()
@@ -486,11 +483,11 @@ ROUNDS_UNTIL_HARD_RESTART 3
 ##	By default, this is 15x15, which gets simplified to 7 by BYOND, as it is a 1:1 screen ratio.
 ##	For reference, Goonstation uses a resolution of 21x15 for it's widescreen mode.
 ##	Do note that changing this value will affect the title screen. The title screen will have to be updated manually if this is changed.
-DEFAULT_VIEW 15x15
+DEFAULT_VIEW 19x15
 
 ## Name your perpetual currency here
 ## This is used within the metashop and earned by playing the game.
-METACURRENCY_NAME BeeCoin
+METACURRENCY_NAME CarpCoin
 
 ## Grant metacurrency
 ## Comment this out if you don't want players to earn metacurrency
